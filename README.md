@@ -1,1 +1,2 @@
-# NorthStar
+# north-star
+
