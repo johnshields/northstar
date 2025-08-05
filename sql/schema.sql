@@ -20,13 +20,3 @@ create table public.ns_orders
 
     unique (merchant_id, order_id)
 );
-
-create table public.ns_gmv_snapshots
-(
-    id            uuid primary key default uuid_generate_v4(),
-    merchant_id   uuid    not null references public.ns_merchants (id) on delete cascade,
-    snapshot_date date    not null,
-    gmv           numeric not null,
-
-    unique (merchant_id, snapshot_date)
-);
