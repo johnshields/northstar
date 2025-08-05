@@ -1,4 +1,5 @@
 ﻿const supabase = require('../clients/supabaseClient');
+
 const {
     shopifyFetcher,
     getOrdersFromDB,

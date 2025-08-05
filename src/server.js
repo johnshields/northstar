@@ -1,7 +1,6 @@
 ﻿const express = require('express');
 const dotenv = require('dotenv');
 const routes = require('./routes/apiRoutes');
-require('@shopify/shopify-api/adapters/node');
 
 dotenv.config();
 
@@ -11,7 +10,7 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use('/api', routes);
 
-// Root health check route
+// Load balancer route
 app.get('/', (req, res) => {
     res.json({
         service: 'northstar',
