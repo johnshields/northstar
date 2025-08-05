@@ -1,19 +1,16 @@
 ﻿const supabase = require('../db/supabaseClient');
-const {shopifyFetcher} = require('../services/shopifyService');
-const {getOrdersFromDB, calculateGMVSummary} = require('../services/supabaseService');
+const {shopifyFetcher, getOrdersFromDB, calculateGMVSummary} = require('../services/apiService');
 
-// Centralised error handler for consistent error responses
 const handleError = (res, status, message) => {
     return res.status(status).json({error: message});
 };
 
 /**
  * GET /api/shopify-fetch
- * Fetches Shopify order-level sales data for a single merchant
+ * Fetches Shopify order-level sales data for a merchant
  */
 exports.shopifyFetch = async (req, res) => {
     try {
-        // Retrieve a single merchant from the database
         const {data: merchant, error} = await supabase
             .from('ns_merchants')
             .select('*')
