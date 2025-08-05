@@ -1,48 +1,35 @@
 ﻿const shopify = require('../clients/shopifyClient');
 const supabase = require('../clients/supabaseClient');
-require('@shopify/shopify-api/adapters/node');
-
 
 /**
- * Fetch Shopify orders.
+ * Fetches Shopify order-level sales data for a merchant.
  */
 const shopifyFetcher = async () => {
     const session = {
         shop: process.env.SHOPIFY_SHOP,
-        accessToken: process.env.SHOPIFY_ACCESS_TOKEN
+        accessToken: process.env.SHOPIFY_ACCESS_TOKEN,
     };
 
     const client = new shopify.clients.Graphql({session});
 
-    const response = await client.query({
-        data: `query {
-      orders(first: 10) {
-        edges {
-          cursor
-          node {
-            id
+    const query = `
+      query {
+        orders(first: 10) {
+          edges {
+            node {
+              id
+              name
+              createdAt
+              totalPrice
+            }
           }
         }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          startCursor
-          endCursor
-        }
       }
-    }`
-    });
+    `;
 
-    return response.body.data.orders;
-};
+    const response = await client.query({data: query});
 
-const getOrdersFromDB = async () => {
-    const {data, error} = await supabase
-        .from('ns_orders')
-        .select(`id, total_price, ns_merchants (id, name)`);
-
-    if (error) throw new Error(error.message);
-    return data;
+    return response.body?.data?.orders?.edges.map(edge => edge.node) || [];
 };
 
 /**
@@ -85,8 +72,17 @@ const calculateGMVSummary = (orders) => {
     };
 };
 
+const getOrdersFromDB = async () => {
+    const {data, error} = await supabase
+        .from('ns_orders')
+        .select(`id, total_price, ns_merchants (id, name)`);
+
+    if (error) throw new Error(error.message);
+    return data;
+};
+
 module.exports = {
-    getOrdersFromDB,
+    shopifyFetcher,
     calculateGMVSummary,
-    shopifyFetcher
+    getOrdersFromDB
 };
