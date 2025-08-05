@@ -5,12 +5,13 @@ require('@shopify/shopify-api/adapters/node');
 
 dotenv.config();
 
-const PORT = process.env.PORT || 8080;
+// App setup
 const app = express();
-
+const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use('/api', routes);
 
+// Root health check route
 app.get('/', (req, res) => {
     res.json({
         service: 'northstar',
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
     });
 });
 
+// Start server
 app.listen(PORT, () => {
     console.log(`northstar API running on port ${PORT}`);
 });

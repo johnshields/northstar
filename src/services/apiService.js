@@ -2,7 +2,8 @@
 const supabase = require('../clients/supabaseClient');
 
 /**
- * Fetches Shopify order-level sales data for a merchant.
+ * Fetches Shopify order-level sales data for a single merchant.
+ * Returns: [{ id, name, createdAt, totalPrice }]
  */
 const shopifyFetcher = async () => {
     const session = {
@@ -12,20 +13,18 @@ const shopifyFetcher = async () => {
 
     const client = new shopify.clients.Graphql({session});
 
-    const query = `
-      query {
-        orders(first: 10) {
-          edges {
-            node {
-              id
-              name
-              createdAt
-              totalPrice
-            }
-          }
-        }
-      }
-    `;
+    const query = `query {
+                            orders(first: 10) {
+                              edges {
+                                node {
+                                  id
+                                  name
+                                  createdAt
+                                  totalPrice
+                                }
+                              }
+                            }
+                          }`;
 
     const response = await client.query({data: query});
 
@@ -33,51 +32,53 @@ const shopifyFetcher = async () => {
 };
 
 /**
- * Takes an array of orders (with merchant info) and returns:
- * - Total GMV across all merchants
- * - A list of merchants with their GMV, total orders, and AOV
+ * Calculates GMV summary for a set of Supabase orders.
+ * Returns:
+ * - Total GMV
+ * - Per-merchant GMV, order count, and AOV
  */
 const calculateGMVSummary = (orders) => {
-    const merchantTotals = {};
+    const merchantStats = {};
     let totalGMV = 0;
 
     for (const {total_price, ns_merchants: merchant} of orders) {
-        // Ignore if merchant join is missing
         if (!merchant) continue;
 
         const {id, name} = merchant;
         const price = parseFloat(total_price);
 
-        // Initialise if this merchant hasn't been seen yet
-        if (!merchantTotals[id]) {
-            merchantTotals[id] = {id, name, gmv: 0, total_orders: 0};
+        if (!merchantStats[id]) {
+            merchantStats[id] = {id, name, gmv: 0, total_orders: 0};
         }
 
-        // Update this merchant's stats
-        merchantTotals[id].gmv += price;
-        merchantTotals[id].total_orders += 1;
-
-        // Track total GMV
+        merchantStats[id].gmv += price;
+        merchantStats[id].total_orders += 1;
         totalGMV += price;
     }
 
-    // Calculate AOV for each merchant
-    const merchants = Object.values(merchantTotals).map(merchant => ({
-        ...merchant, aov: parseFloat((merchant.gmv / merchant.total_orders).toFixed(2))
+    const merchants = Object.values(merchantStats).map(({id, name, gmv, total_orders}) => ({
+        id,
+        name,
+        gmv: parseFloat(gmv.toFixed(2)),
+        total_orders,
+        aov: parseFloat((gmv / total_orders).toFixed(2)),
     }));
 
     return {
         total_gmv: parseFloat(totalGMV.toFixed(2)),
-        merchants
+        merchants,
     };
 };
 
+/**
+ * Fetches all orders from Supabase with merchant info.
+ */
 const getOrdersFromDB = async () => {
     const {data, error} = await supabase
         .from('ns_orders')
-        .select(`id, total_price, ns_merchants (id, name)`);
+        .select('id, total_price, ns_merchants (id, name)');
 
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(`Supabase error: ${error.message}`);
     return data;
 };
 

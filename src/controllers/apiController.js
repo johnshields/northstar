@@ -1,28 +1,32 @@
 ﻿const supabase = require('../clients/supabaseClient');
-const {shopifyFetcher, getOrdersFromDB, calculateGMVSummary} = require('../services/apiService');
+const {
+    shopifyFetcher,
+    getOrdersFromDB,
+    calculateGMVSummary
+} = require('../services/apiService');
 
 const handleError = (res, status, message) => {
+    console.error(message);
     return res.status(status).json({error: message});
 };
 
 /**
  * GET /api/shopify-fetch
- * Fetches Shopify order-level sales data for a merchant
+ * Fetches order-level sales data for a merchant from Shopify.
  */
 exports.shopifyFetch = async (req, res) => {
     try {
         const data = await shopifyFetcher();
-        res.json(data);
+        return res.json(data);
     } catch (err) {
-        console.error('Error fetching Shopify orders:', err);
-        res.status(500).json({ error: 'Failed to fetch orders from Shopify' });
+        handleError(res, 500, 'Failed to fetch orders from Shopify');
     }
 };
 
 /**
  * GET /api/gmv-summary
- * Returns GMV (Gross Merchandise Value) summary including:
- *  - Each merchant’s GMV, AOV (Average Order Value), and total orders
+ * Returns GMV summary:
+ *  - GMV, AOV, total orders per merchant
  *  - Total GMV across all merchants
  */
 exports.gmvSummary = async (req, res) => {
@@ -48,7 +52,7 @@ exports.gmvSummary = async (req, res) => {
 
 /**
  * GET /api/merchants
- * Returns all merchants from the database (for testing/dev purposes)
+ * Returns all merchants from Supabase (for dev/testing).
  */
 exports.getMerchants = async (req, res) => {
     const {data, error} = await supabase
@@ -56,16 +60,13 @@ exports.getMerchants = async (req, res) => {
         .select('*')
         .order('created_at', {ascending: true});
 
-    if (error) {
-        return handleError(res, 500, error.message);
-    }
-
+    if (error) return handleError(res, 500, error.message);
     return res.json(data);
 };
 
 /**
  * GET /api/orders
- * Returns all orders from the database (for testing/dev purposes)
+ * Returns all orders from Supabase (for dev/testing).
  */
 exports.getOrders = async (req, res) => {
     const {data, error} = await supabase
@@ -73,9 +74,6 @@ exports.getOrders = async (req, res) => {
         .select('*')
         .order('created_at', {ascending: true});
 
-    if (error) {
-        return handleError(res, 500, error.message);
-    }
-
+    if (error) return handleError(res, 500, error.message);
     return res.json(data);
 };
