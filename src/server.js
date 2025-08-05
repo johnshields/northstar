@@ -1,6 +1,7 @@
 ﻿const express = require('express');
 const dotenv = require('dotenv');
 const routes = require('./routes/apiRoutes');
+require('./scheduler');
 
 dotenv.config();
 
