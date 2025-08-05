@@ -1,6 +1,6 @@
 # northstar
 
-Microservice for calculating GMV and syncing Shopify order data using **Node.js**, **Express**, **Supabase**, and the **Shopify Admin GraphQL API**.
+Microservice with Shopify and Supabase integration using **Node.js** and **Express**.
 
 ## Development Environment
 

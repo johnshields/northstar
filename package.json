@@ -1,23 +1,12 @@
 {
-  "name": "north-star",
+  "name": "northstar-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "Microservice with Shopify and Supabase integration.",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/johnshields/northstar.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/johnshields/northstar/issues"
-  },
-  "homepage": "https://github.com/johnshields/northstar#readme",
   "dependencies": {
     "@shopify/shopify-api": "^11.14.1",
     "@supabase/supabase-js": "^2.53.0",
@@ -25,5 +14,20 @@
     "express": "^5.1.0",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnshields/northstar.git"
+  },
+  "keywords": [],
+  "author": "John Shields",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/johnshields/northstar/issues"
+  },
+  "homepage": "https://github.com/johnshields/northstar#readme",
+  "type": "commonjs"
 }
