@@ -2,8 +2,8 @@
 const router = express.Router();
 
 const {
-    gmvSummary,
     shopifyFetch,
+    gmvSummary,
     getMerchants,
     getOrders,
 } = require('../controllers/apiController');

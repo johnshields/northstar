@@ -1,35 +1,39 @@
-﻿const supabase = require('../db/supabaseClient');
+﻿const shopify = require('../clients/shopifyClient');
+const supabase = require('../clients/supabaseClient');
+require('@shopify/shopify-api/adapters/node');
+
 
 /**
- * Fetch Shopify-style orders for a given merchant from Supabase.
- * The response mimics Shopify's GraphQL orders query format.
+ * Fetch Shopify orders.
  */
-const shopifyFetcher = async (merchant) => {
-    const {data, error} = await supabase
-        .from('ns_orders')
-        .select('id, created_at, total_price')
-        .eq('merchant_id', merchant.id);
-
-    if (error) throw new Error(error.message);
-
-    const edges = data.map((order, index) => ({
-        cursor: `cursor_${index + 1}`,
-        node: {
-            id: `gid://shopify/Order/${order.id}`,
-            createdAt: order.created_at,
-            totalPrice: order.total_price
-        }
-    }));
-
-    return {
-        edges,
-        pageInfo: {
-            hasNextPage: false,
-            hasPreviousPage: false,
-            startCursor: edges[0]?.cursor || null,
-            endCursor: edges.at(-1)?.cursor || null
-        }
+const shopifyFetcher = async () => {
+    const session = {
+        shop: process.env.SHOPIFY_SHOP,
+        accessToken: process.env.SHOPIFY_ACCESS_TOKEN
     };
+
+    const client = new shopify.clients.Graphql({session});
+
+    const response = await client.query({
+        data: `query {
+      orders(first: 10) {
+        edges {
+          cursor
+          node {
+            id
+          }
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
+        }
+      }
+    }`
+    });
+
+    return response.body.data.orders;
 };
 
 const getOrdersFromDB = async () => {

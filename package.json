@@ -2,22 +2,22 @@
   "name": "north-star",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johnshields/NorthStar.git"
+    "url": "git+https://github.com/johnshields/northstar.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/johnshields/NorthStar/issues"
+    "url": "https://github.com/johnshields/northstar/issues"
   },
-  "homepage": "https://github.com/johnshields/NorthStar#readme",
+  "homepage": "https://github.com/johnshields/northstar#readme",
   "dependencies": {
     "@shopify/shopify-api": "^11.14.1",
     "@supabase/supabase-js": "^2.53.0",

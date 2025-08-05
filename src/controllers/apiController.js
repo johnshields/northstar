@@ -1,4 +1,4 @@
-﻿const supabase = require('../db/supabaseClient');
+﻿const supabase = require('../clients/supabaseClient');
 const {shopifyFetcher, getOrdersFromDB, calculateGMVSummary} = require('../services/apiService');
 
 const handleError = (res, status, message) => {
@@ -11,28 +11,11 @@ const handleError = (res, status, message) => {
  */
 exports.shopifyFetch = async (req, res) => {
     try {
-        const {data: merchant, error} = await supabase
-            .from('ns_merchants')
-            .select('*')
-            .limit(1)
-            .single();
-
-        if (error || !merchant) {
-            return handleError(res, 404, 'No merchant found in database');
-        }
-
-        // Fetch Shopify order data for the merchant
-        const orders = await shopifyFetcher(merchant);
-
-        // Return merchant name + fetched order data
-        res.json({
-            merchant: merchant.name,
-            orders
-        });
-
+        const data = await shopifyFetcher();
+        res.json(data);
     } catch (err) {
-        console.error('Shopify fetch failed:', err);
-        return handleError(res, 500, 'Internal server error');
+        console.error('Error fetching Shopify orders:', err);
+        res.status(500).json({ error: 'Failed to fetch orders from Shopify' });
     }
 };
 
