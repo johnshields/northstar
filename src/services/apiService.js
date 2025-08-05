@@ -37,7 +37,7 @@ const shopifyFetcher = async () => {
  * - Total GMV
  * - Per-merchant GMV, order count, and AOV
  */
-const calculateGMVSummary = (orders) => {
+const calculateGMV = (orders) => {
     const merchantStats = {};
     let totalGMV = 0;
 
@@ -84,6 +84,6 @@ const getOrdersFromDB = async () => {
 
 module.exports = {
     shopifyFetcher,
-    calculateGMVSummary,
+    calculateGMV,
     getOrdersFromDB
 };

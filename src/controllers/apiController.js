@@ -3,7 +3,7 @@
 const {
     shopifyFetcher,
     getOrdersFromDB,
-    calculateGMVSummary
+    calculateGMV
 } = require('../services/apiService');
 
 const handleError = (res, status, message) => {
@@ -36,7 +36,7 @@ exports.gmvSummary = async (req, res) => {
         const orders = await getOrdersFromDB();
 
         // Calculate GMV summary stats
-        const {total_gmv, merchants} = calculateGMVSummary(orders);
+        const {total_gmv, merchants} = calculateGMV(orders);
 
         // Return structured summary with timestamp
         res.json({
