@@ -83,20 +83,20 @@ const syncShopifyOrders = async () => {
 
 /**
  * Calculates GMV summary for a set of Supabase orders.
- * Returns:
- * - Total GMV
- * - Per-merchant GMV, order count, and AOV
+ * Returns: Total GMV, Per-merchant GMV, order count, and AOV
  */
 const calculateGMV = (orders) => {
     const merchantStats = {};
     let totalGMV = 0;
 
     for (const {total_price, ns_merchants: merchant} of orders) {
+        // Skip if merchant relation is missing
         if (!merchant) continue;
 
         const {id, name} = merchant;
         const price = parseFloat(total_price);
 
+        // Initialise merchant record if first time seen
         if (!merchantStats[id]) {
             merchantStats[id] = {id, name, gmv: 0, total_orders: 0};
         }
@@ -106,6 +106,7 @@ const calculateGMV = (orders) => {
         totalGMV += price;
     }
 
+    // Format final summary per merchant
     const merchants = Object.values(merchantStats).map(({id, name, gmv, total_orders}) => ({
         id,
         name,
