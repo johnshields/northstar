@@ -2,13 +2,15 @@
 const router = express.Router();
 
 const {
-    getShopifyOrders,
+    fetchOrders,
+    syncOrders,
     gmvSummary,
     getMerchants,
     getOrders,
 } = require('../controllers/apiController');
 
-router.get('/shopify-fetch', getShopifyOrders);
+router.get('/shopify-fetch', fetchOrders);
+router.get('/shopify-sync', syncOrders);
 router.get('/gmv-summary', gmvSummary);
 router.get('/merchants', getMerchants);
 router.get('/orders', getOrders);

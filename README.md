@@ -61,6 +61,9 @@ Returns all orders from the Supabase `ns_orders` table.
 ### `GET /api/shopify-fetch`  
 Queries the Shopify Admin GraphQL API to fetch live order-level sales data for the configured merchant.
 
+### `GET /api/shopify-sync`
+Fetches live order-level sales data from the Shopify Admin GraphQL API and inserts new orders into the Supabase database.
+
 ### `GET /api/gmv-summary`
 Returns total GMV across all merchants and AOV/total orders per merchant.
 

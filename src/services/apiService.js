@@ -29,6 +29,56 @@ const shopifyFetcher = async () => {
     const response = await client.query({data: query});
 
     return response.body?.data?.orders?.edges.map(edge => edge.node) || [];
+}
+
+/**
+ * Fetches latest Shopify orders and inserts them into DB.
+ */
+const syncShopifyOrders = async () => {
+    const orders = await shopifyFetcher();
+
+    for (const order of orders) {
+        const {id, name, createdAt, totalPrice} = order;
+
+        // Skip if order already exists
+        const {data: existing} = await supabase
+            .from('ns_orders')
+            .select('id')
+            .eq('order_id', id)
+            .maybeSingle();
+
+        if (existing) {
+            console.log(`Order ${id} already exists, skipping.`);
+            continue;
+        }
+
+        // Find corresponding merchant
+        const {data: merchant} = await supabase
+            .from('ns_merchants')
+            .select('id')
+            .eq('shopify_domain', process.env.SHOPIFY_SHOP)
+            .maybeSingle();
+
+        if (!merchant) {
+            console.error(`Merchant with domain ${process.env.SHOPIFY_SHOP} not found.`);
+            continue;
+        }
+
+        // Insert order
+        const {error: insertErr} = await supabase.from('ns_orders').insert({
+            order_id: id,
+            merchant_id: merchant.id,
+            total_price: totalPrice,
+            currency_code: 'AUD',
+            created_at: createdAt,
+        });
+
+        if (insertErr) {
+            console.error(`Failed to insert order ${id}:`, insertErr.message);
+        } else {
+            console.log(`Inserted order ${id} (${name})`);
+        }
+    }
 };
 
 /**
@@ -84,6 +134,7 @@ const getOrdersFromDB = async () => {
 
 module.exports = {
     shopifyFetcher,
+    syncShopifyOrders,
     calculateGMV,
-    getOrdersFromDB
+    getOrdersFromDB,
 };
