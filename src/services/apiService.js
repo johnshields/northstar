@@ -14,17 +14,17 @@ const shopifyFetcher = async () => {
     const client = new shopify.clients.Graphql({session});
 
     const query = `query {
-                            orders(first: 10) {
-                              edges {
-                                node {
-                                  id
-                                  name
-                                  createdAt
-                                  totalPrice
-                                }
-                              }
-                            }
-                          }`;
+        orders(first: 10) {
+          edges {
+            node {
+              id
+              name
+              createdAt
+              totalPrice
+            }
+          }
+        }
+    }`;
 
     const response = await client.query({data: query});
 

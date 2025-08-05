@@ -14,7 +14,7 @@ const handleError = (res, status, message) => {
  * GET /api/shopify-fetch
  * Fetches order-level sales data for a merchant from Shopify.
  */
-exports.shopifyFetch = async (req, res) => {
+exports.getShopifyOrders = async (req, res) => {
     try {
         const data = await shopifyFetcher();
         return res.json(data);
