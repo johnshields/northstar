@@ -27,7 +27,7 @@ exports.fetchOrders = async (req, res) => {
 
 /**
  * GET /api/shopify-sync
- * Fetches latest Shopify orders to sync DB.
+ * Fetches latest Shopify orders to sync Supabase.
  */
 exports.syncOrders = async (req, res) => {
     try {
@@ -71,7 +71,10 @@ exports.getMerchants = async (req, res) => {
         .select('*')
         .order('created_at', {ascending: true});
 
-    if (error) return handleError(res, 500, error.message);
+    if (error) {
+        return handleError(res, 500, error.message);
+    }
+
     return res.json(data);
 };
 
@@ -85,6 +88,9 @@ exports.getOrders = async (req, res) => {
         .select('*')
         .order('created_at', {ascending: true});
 
-    if (error) return handleError(res, 500, error.message);
+    if (error) {
+        return handleError(res, 500, error.message);
+    }
+
     return res.json(data);
 };

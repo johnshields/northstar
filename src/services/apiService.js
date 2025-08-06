@@ -32,7 +32,7 @@ const shopifyFetcher = async () => {
 }
 
 /**
- * Fetches latest Shopify orders and inserts them into DB.
+ * Fetches latest Shopify orders and inserts them into Supabase.
  */
 const syncShopifyOrders = async () => {
     const orders = await shopifyFetcher();
@@ -52,7 +52,7 @@ const syncShopifyOrders = async () => {
             continue;
         }
 
-        // Find corresponding merchant
+        // Find relevant merchant
         const {data: merchant} = await supabase
             .from('ns_merchants')
             .select('id')
@@ -96,7 +96,7 @@ const calculateGMV = (orders) => {
         const {id, name} = merchant;
         const price = parseFloat(total_price);
 
-        // Initialise merchant record if first time seen
+        // Init merchant record if first time seen
         if (!merchantStats[id]) {
             merchantStats[id] = {id, name, gmv: 0, total_orders: 0};
         }
