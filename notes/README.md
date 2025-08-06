@@ -28,7 +28,7 @@ The Supabase schema mirrors Shopify’s order structure in a straightforward way
 - Deduplication: Double-check for existing orders before inserting them into Supabase (currently handled with a basic ID check).
 - Auth: Lock down `/api/` routes with API keys or JWTs for production use.
 - Testing: Add unit tests for each service layer (shopifyClient, apiService, etc.).
-- Scaling: Containerise the service with Docker and deploy on a serverless platform (e.g., Fly.io, Railway) for production.
+- Scaling: Containerise the service with Docker and deploy on a serverless platform (e.g. Fly.io, Railway) for production.
 - CI/CD: Set up GitHub Actions to automatically lint, test, and deploy when changes hit main.
 
 ---
