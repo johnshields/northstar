@@ -20,7 +20,6 @@ The Supabase schema mirrors Shopify’s order structure in a straightforward way
 ![Supabase DB Structure](./northstar_proj-Page-2.drawio.png)
 
 ---
-<br>
 
 ## Future Improvements
 
