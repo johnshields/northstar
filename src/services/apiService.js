@@ -4,6 +4,7 @@ const supabase = require('../clients/supabaseClient');
 /**
  * Fetches Shopify order-level sales data for a single merchant.
  * Returns: [{ id, name, createdAt, totalPrice }]
+ * Ref: https://shopify.dev/docs/api/admin-graphql/latest/queries/orders
  */
 const shopifyFetcher = async () => {
     const session = {
