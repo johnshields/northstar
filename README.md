@@ -6,7 +6,7 @@ Microservice with Shopify and Supabase integration using **Node.js** and **Expre
 
 - Node.js / Express
 - Supabase (PostgreSQL)
-- Shopify Admin API (GraphQL)
+- Shopify Admin API
 
 ---
 
@@ -20,6 +20,12 @@ Microservice with Shopify and Supabase integration using **Node.js** and **Expre
 - [Shopify Partner Account](https://partners.shopify.com/)
 
 ### Setup & Run
+
+#### Open a directory in Command-Line and enter:
+```bash
+$ git clone https://github.com/johnshields/northstar.git
+$ cd northstar/
+```
 
 #### Create a .env file:
 
@@ -40,10 +46,8 @@ PORT=8080
 
 #### SQL script located here [sql/schema.sql](sql/schema.sql)
 
-#### Open a directory in Command-Line and enter:
+#### Run the API
 ```bash
-$ git clone https://github.com/johnshields/northstar.git
-$ cd northstar/
 $ npm install
 $ node src/server.js
 ```
