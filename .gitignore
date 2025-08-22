@@ -14,7 +14,3 @@ node_modules/
 # IDE settings
 .vscode/
 .idea/
-
-# Misc
-notes/task.pdf
-notes/notes.pdf

@@ -1,4 +1,4 @@
-# northstar
+# northstar 🌠🛍️
 
 Microservice with Shopify Admin API and Supabase (PostgreSQL) integration using **Node.js** and **Express**.
 
@@ -22,14 +22,14 @@ $ node src/server.js
 
 ```dotenv
 # supabase
-SUPABASE_URL=your_supabase_url
-SUPABASE_KEY=your_supabase_anon_key
+SUPABASE_URL=supabase_url
+SUPABASE_KEY=anon_key
 
 # shopify
-SHOPIFY_API_KEY=your_shopify_api_key
-SHOPIFY_API_SECRET=your_shopify_api_secret
-SHOPIFY_ACCESS_TOKEN=your_shopify_admin_access_token
-SHOPIFY_SHOP=your-shop-name
+SHOPIFY_API_KEY=shopify_api_key
+SHOPIFY_API_SECRET=shopify_api_secret
+SHOPIFY_ACCESS_TOKEN=shopify_access_token
+SHOPIFY_SHOP=shop-name
 
 # api
 PORT=8080
