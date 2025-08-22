@@ -1,16 +1,6 @@
 # northstar
 
-Microservice with Shopify and Supabase integration using **Node.js** and **Express**.
-
-## Development Environment
-
-- Node.js / Express
-- Supabase (PostgreSQL)
-- Shopify Admin API
-
----
-
-## How to Run
+Microservice with Shopify Admin API and Supabase (PostgreSQL) integration using **Node.js** and **Express**.
 
 ### Requirements
 
@@ -19,17 +9,18 @@ Microservice with Shopify and Supabase integration using **Node.js** and **Expre
 - [Node.js & NPM](https://nodejs.org/)
 - [Shopify Partner Account](https://partners.shopify.com/)
 
-### Setup & Run
+## Run service
 
-#### Open a directory in Command-Line and enter:
 ```bash
 $ git clone https://github.com/johnshields/northstar.git
 $ cd northstar/
+$ npm install
+$ node src/server.js
 ```
 
-#### Create a .env file:
+#### .env example:
 
-```
+```dotenv
 # supabase
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_anon_key
@@ -45,14 +36,6 @@ PORT=8080
 ```
 
 #### SQL script located here [sql/schema.sql](sql/schema.sql)
-
-#### Run the API
-```bash
-$ npm install
-$ node src/server.js
-```
-
-* The API will listen on: http://localhost:8080/
 
 ## Endpoints
 
