@@ -5,7 +5,7 @@ const {
     syncShopifyOrders,
     getOrdersFromDB,
     calculateGMV
-} = require('../services/apiService');
+} = require('../controllers/controller');
 
 const handleError = (res, status, message) => {
     console.error(message);

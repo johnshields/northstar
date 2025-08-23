@@ -1,4 +1,4 @@
-# northstar 🌠🛍️
+# northstar 🌠
 
 Microservice with Shopify Admin API and Supabase (PostgreSQL) integration using **Node.js** and **Express**.
 

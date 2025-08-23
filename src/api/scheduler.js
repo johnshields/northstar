@@ -1,5 +1,5 @@
 ﻿const cron = require('node-cron');
-const {shopifyFetcher, syncShopifyOrders} = require('./services/apiService');
+const {shopifyFetcher, syncShopifyOrders} = require('./controllers/controller');
 
 cron.schedule('0 * * * *', async () => {
     console.log(`[${new Date().toISOString()}] Scheduled Task: Fetching latest orders from Shopify...`);

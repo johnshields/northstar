@@ -1,10 +1,14 @@
 ﻿// server.js
 const express = require('express');
-const routes = require('./routes/apiRoutes');
+const routes = require('./api');
 
 require('dotenv').config();
-require('./scheduler');
+require('./api/scheduler');
 
+// Load api config
+const {NAME, HOST, PORT, VERSION, API_VERSION} = require('./config');
+
+// simple logger helpers
 const ts = () => new Date().toISOString();
 const info = (msg) => console.log(`[info]: ${msg}`);
 const error = (msg) => console.error(`[error]: ${msg}`);
@@ -12,8 +16,8 @@ const error = (msg) => console.error(`[error]: ${msg}`);
 class Server {
     constructor() {
         this.app = express();
-        this.host = process.env.IP || '127.0.0.1';
-        this.port = Number(process.env.PORT) || 8080;
+        this.host = HOST;
+        this.port = PORT;
         this.server = null;
         this.startedAt = Date.now();
 
@@ -22,38 +26,43 @@ class Server {
     }
 
     configure() {
+        // middleware: parse JSON bodies
         this.app.use(express.json());
     }
 
     mountRoutes() {
+        // mount API routes
         this.app.use('/api', routes);
 
+        // health / info endpoint
         this.app.get('/', (req, res) => {
             const uptimeSeconds = Math.floor((Date.now() - this.startedAt) / 1000);
             res.json({
                 status: 'OK',
-                service: 'northstar_api',
-                version: '0.0.1',
-                api_version: 'v1',
+                service: NAME,
+                version: VERSION,
+                api_version: API_VERSION,
                 timestamp: ts(),
                 uptime_seconds: uptimeSeconds,
-                message: 'northstar API is live...',
+                message: `${NAME} is live...`,
             });
         });
     }
 
     start() {
-        info('northstar API booting up...');
+        // start server
+        info(`${NAME} booting up...`);
         this.server = this.app.listen(this.port, this.host, () => {
-            info(`northstar API running at http://${this.host}:${this.port}/`);
+            info(`${NAME} running at http://${this.host}:${this.port}/`);
         });
 
         this.server.on('error', (e) => {
             error(`server error: ${e instanceof Error ? e.message : String(e)}`);
         });
 
+        // graceful shutdown handler
         const shutdown = () => {
-            info('northstar API shutting down...');
+            info(`${NAME} shutting down...`);
             if (!this.server) process.exit(0);
             this.server.close(() => process.exit(0));
             setTimeout(() => {
@@ -62,6 +71,7 @@ class Server {
             }, 5000);
         };
 
+        // register shutdown / error signals
         process.on('SIGINT', shutdown);
         process.on('SIGTERM', shutdown);
         process.on('uncaughtException', (e) =>
@@ -75,7 +85,7 @@ class Server {
     }
 }
 
-// Run service
+// Run service directly
 if (require.main === module) {
     new Server().start();
 }

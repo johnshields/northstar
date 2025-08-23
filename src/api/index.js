@@ -7,7 +7,7 @@ const {
     gmvSummary,
     getMerchants,
     getOrders,
-} = require('../controllers/apiController');
+} = require('./routes/routes');
 
 router.get('/shopify-fetch', fetchOrders);
 router.get('/shopify-sync', syncOrders);
