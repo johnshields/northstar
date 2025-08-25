@@ -2,27 +2,34 @@
 const router = express.Router();
 
 const {
-    postOrder, putOrder, deleteOrder, getOrders,
-    fetchShopifyOrders, getShopifySync
+    fetchShopifyOrders,
+    getShopifySync,
+    getOrders,
+    postOrder,
+    putOrder,
+    deleteOrder,
 } = require('./routes/orders');
 
 const {
-    postMerchant, putMerchant, deleteMerchant,
-    getMerchants, getGMVSummary
+    getMerchants,
+    getGMVSummary,
+    postMerchant,
+    putMerchant,
+    deleteMerchant,
 } = require('./routes/merchants');
 
 // merchants
+router.get('/gmv-summary', getGMVSummary);
+router.get('/merchants', getMerchants);
 router.post('/merchants', postMerchant);
 router.put('/merchants/:uid', putMerchant);
 router.delete('/merchants/:uid', deleteMerchant);
-router.get('/merchants', getMerchants);
-router.get('/gmv-summary', getGMVSummary);
 
 // orders
+router.get('/orders', getOrders);
 router.post('/orders', postOrder);
 router.put('/orders/:uid', putOrder);
 router.delete('/orders/:uid', deleteOrder);
-router.get('/orders', getOrders);
 
 // shopify
 router.get('/shopify-fetch', fetchShopifyOrders);

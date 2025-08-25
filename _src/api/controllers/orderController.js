@@ -3,97 +3,6 @@ const shopify = require('../clients/shopifyClient');
 const {generateUID} = require('../../utils/utils');
 const config = require('../../config');
 
-
-// Creates a new order in database.
-const createOrder = async (orderData) => {
-    const {data, error} = await supabase
-        .from('ns_orders')
-        .insert({uid: generateUID('ORDER'), ...orderData})
-        .select()
-        .single();
-
-    if (error) {
-        throw new Error(error.message);
-    }
-
-    return data;
-};
-
-// Updates order by UID in database.
-const updateOrderByUID = async (uid, updateData) => {
-    // Check if order exists first
-    const {data: existing} = await supabase
-        .from('ns_orders')
-        .select('uid')
-        .eq('uid', uid)
-        .maybeSingle();
-
-    if (!existing) {
-        return null; // Order not found
-    }
-
-    const {data, error} = await supabase
-        .from('ns_orders')
-        .update(updateData)
-        .eq('uid', uid)
-        .select()
-        .single();
-
-    if (error) {
-        throw new Error(error.message);
-    }
-
-    return data;
-};
-
-// Deletes order by UID in database.
-const deleteOrderByUID = async (uid) => {
-    // Check if order exists first
-    const {data: existing} = await supabase
-        .from('ns_orders')
-        .select('uid')
-        .eq('uid', uid)
-        .maybeSingle();
-
-    if (!existing) {
-        return null; // Order not found
-    }
-
-    const {data, error} = await supabase
-        .from('ns_orders')
-        .delete()
-        .eq('uid', uid)
-        .select()
-        .single();
-
-    if (error) {
-        throw new Error(error.message);
-    }
-
-    return data;
-};
-
-// Retrieves orders from database - all orders or single order by UID
-const listOrders = async (uid = null) => {
-    let query = supabase
-        .from('ns_orders')
-        .select('*')
-        .order('created_at', {ascending: true});
-
-    // If UID provided, filter by it
-    if (uid) {
-        query = query.eq('uid', uid).maybeSingle();
-    }
-
-    const {data, error} = await query;
-
-    if (error) {
-        throw new Error(error.message);
-    }
-
-    return data;
-};
-
 /**
  * Fetches Shopify order-level sales data for a single merchant.
  * Returns: [{ id, name, createdAt, totalPrice, currencyCode }]
@@ -175,11 +84,101 @@ const syncShopifyOrders = async () => {
     }
 };
 
+// Retrieves orders from database - all orders or single order by UID
+const listOrders = async (uid = null) => {
+    let query = supabase
+        .from('ns_orders')
+        .select('*')
+        .order('created_at', {ascending: true});
+
+    // If UID provided, filter by it
+    if (uid) {
+        query = query.eq('uid', uid).maybeSingle();
+    }
+
+    const {data, error} = await query;
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
+// Creates a new order in database.
+const createOrder = async (orderData) => {
+    const {data, error} = await supabase
+        .from('ns_orders')
+        .insert({uid: generateUID('ORDER'), ...orderData})
+        .select()
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
+// Updates order by UID in database.
+const updateOrderByUID = async (uid, updateData) => {
+    // Check if order exists first
+    const {data: existing} = await supabase
+        .from('ns_orders')
+        .select('uid')
+        .eq('uid', uid)
+        .maybeSingle();
+
+    if (!existing) {
+        return null; // Order not found
+    }
+
+    const {data, error} = await supabase
+        .from('ns_orders')
+        .update(updateData)
+        .eq('uid', uid)
+        .select()
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
+// Deletes order by UID in database.
+const deleteOrderByUID = async (uid) => {
+    // Check if order exists first
+    const {data: existing} = await supabase
+        .from('ns_orders')
+        .select('uid')
+        .eq('uid', uid)
+        .maybeSingle();
+
+    if (!existing) {
+        return null; // Order not found
+    }
+
+    const {data, error} = await supabase
+        .from('ns_orders')
+        .delete()
+        .eq('uid', uid)
+        .select()
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
 module.exports = {
+    shopifyFetcher,
+    syncShopifyOrders,
+    listOrders,
     createOrder,
     updateOrderByUID,
     deleteOrderByUID,
-    listOrders,
-    shopifyFetcher,
-    syncShopifyOrders
 };
