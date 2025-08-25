@@ -38,6 +38,8 @@ IP=127.0.0.1
 
 #### SQL script located here [sql/schema.sql](sql/schema.sql)
 
+---
+
 ## Scheduler
 Two background cron jobs are configured with [`node-cron`](https://www.npmjs.com/package/node-cron) to keep Shopify data fresh:
 
