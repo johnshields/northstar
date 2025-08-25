@@ -10,7 +10,7 @@ The microservice was designed to be built with extendability. Instead of jamming
 The `server.js` starts the Express app, wires up the routes, and loads in the scheduler.
 All HTTP endpoints are declared in `routes.js`, which calls the controller methods in `routes.js`.
 
-From there, the controller functions call `controller.js`, which acts as the go-between for Shopify and Supabase. The `shopifyClient.js` handles all GraphQL requests to the Shopify API. The `supabaseClient.js` deals with reads and writes to the Supabase DB.
+From there, the controller functions call `merchantController.js`, which acts as the go-between for Shopify and Supabase. The `shopifyClient.js` handles all GraphQL requests to the Shopify API. The `supabaseClient.js` deals with reads and writes to the Supabase DB.
 The `scheduler.js` runs a node-cron task every hour to fetch new orders, so the system stays in sync without manual work.
 
 ![API Structure](./northstar_proj-Page-1.drawio.png)

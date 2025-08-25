@@ -2,10 +2,10 @@
   "name": "northstar-api",
   "version": "1.0.0",
   "description": "Microservice with Shopify and Supabase integration.",
-  "main": "src/server.js",
+  "main": "_src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "start": "node _src/server.js",
+    "dev": "nodemon _src/server.js"
   },
   "dependencies": {
     "@shopify/shopify-api": "^11.14.1",
