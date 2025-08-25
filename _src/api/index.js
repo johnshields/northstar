@@ -2,20 +2,13 @@
 const router = express.Router();
 
 const {
-    postOrder,
-    putOrder,
-    deleteOrder,
-    getOrders,
-    fetchShopifyOrders,
-    getShopifySync
+    postOrder, putOrder, deleteOrder, getOrders,
+    fetchShopifyOrders, getShopifySync
 } = require('./routes/orders');
 
 const {
-    postMerchant,
-    putMerchant,
-    deleteMerchant,
-    getMerchants,
-    getGMVSummary
+    postMerchant, putMerchant, deleteMerchant,
+    getMerchants, getGMVSummary
 } = require('./routes/merchants');
 
 // merchants
@@ -34,5 +27,10 @@ router.get('/orders', getOrders);
 // shopify
 router.get('/shopify-fetch', fetchShopifyOrders);
 router.get('/shopify-sync', getShopifySync);
+
+// Fallback for any other /api/* routes
+router.use((req, res) => {
+    res.status(404).json({error: 'API route not found.', path: req.originalUrl, method: req.method});
+});
 
 module.exports = router;
