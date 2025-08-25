@@ -1,11 +1,13 @@
-﻿const supabase = require('../clients/supabaseClient');
+﻿const {generateUID} = require('../../utils/utils');
+const supabase = require('../clients/supabaseClient');
 
-// Retrieves all orders from database.
-const listMerchants = async () => {
+// Creates a new merchant in database.
+const createMerchant = async (merchantData) => {
     const {data, error} = await supabase
         .from('ns_merchants')
-        .select('*')
-        .order('created_at', {ascending: true});
+        .insert({uid: generateUID('MERCH'), ...merchantData})
+        .select()
+        .single();
 
     if (error) {
         throw new Error(error.message);
@@ -13,6 +15,81 @@ const listMerchants = async () => {
 
     return data;
 };
+
+// Updates merchant by UID in database.
+const updateMerchantByUID = async (uid, updateData) => {
+    // Check if merchant exists first
+    const {data: existing} = await supabase
+        .from('ns_merchants')
+        .select('uid')
+        .eq('uid', uid)
+        .maybeSingle();
+
+    if (!existing) {
+        return null; // Merchant not found
+    }
+
+    const {data, error} = await supabase
+        .from('ns_merchants')
+        .update(updateData)
+        .eq('uid', uid)
+        .select()
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
+// Deletes merchant by UID in database.
+const deleteMerchantByUID = async (uid) => {
+    // Check if merchant exists first
+    const {data: existing} = await supabase
+        .from('ns_merchants')
+        .select('uid')
+        .eq('uid', uid)
+        .maybeSingle();
+
+    if (!existing) {
+        return null; // Merchant not found
+    }
+
+    const {data, error} = await supabase
+        .from('ns_merchants')
+        .delete()
+        .eq('uid', uid)
+        .select()
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
+// Retrieves merchants from database - all or single by UID
+const listMerchants = async (uid = null) => {
+    let query = supabase
+        .from('ns_merchants')
+        .select('*')
+        .order('created_at', {ascending: true});
+
+    if (uid) {
+        query = query.eq('uid', uid).maybeSingle();
+    }
+
+    const {data, error} = await query;
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
 
 /**
  * Calculates GMV summary for a set of database orders.
@@ -71,6 +148,9 @@ const listMerchantOrders = async () => {
 };
 
 module.exports = {
+    createMerchant,
+    updateMerchantByUID,
+    deleteMerchantByUID,
     listMerchants,
     calculateGMV,
     listMerchantOrders,

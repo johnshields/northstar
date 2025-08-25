@@ -2,20 +2,26 @@
 const router = express.Router();
 
 const {
-    getMerchants,
-    getGMVSummary
-} = require('./routes/merchants');
-
-const {
-    getOrders,
     postOrder,
     putOrder,
     deleteOrder,
+    getOrders,
     fetchShopifyOrders,
     getShopifySync
 } = require('./routes/orders');
 
+const {
+    postMerchant,
+    putMerchant,
+    deleteMerchant,
+    getMerchants,
+    getGMVSummary
+} = require('./routes/merchants');
+
 // merchants
+router.post('/merchants', postMerchant);
+router.put('/merchants/:uid', putMerchant);
+router.delete('/merchants/:uid', deleteMerchant);
 router.get('/merchants', getMerchants);
 router.get('/gmv-summary', getGMVSummary);
 
@@ -24,7 +30,8 @@ router.post('/orders', postOrder);
 router.put('/orders/:uid', putOrder);
 router.delete('/orders/:uid', deleteOrder);
 router.get('/orders', getOrders);
-router.get('orders/:uid', getOrders);
+
+// shopify
 router.get('/shopify-fetch', fetchShopifyOrders);
 router.get('/shopify-sync', getShopifySync);
 

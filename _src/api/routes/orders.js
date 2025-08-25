@@ -36,7 +36,7 @@ exports.putOrder = async (req, res) => {
         return res.status(200).json(order);
     } catch (error) {
         console.error('Error updating order:', error.message);
-        return res.status(500).json({error: 'Failed to update order.'});
+        return handleError(res, 500, 'Failed to update order.');
     }
 };
 
@@ -53,13 +53,13 @@ exports.deleteOrder = async (req, res) => {
         return res.status(200).json({message: 'Order deleted successfully.', order});
     } catch (error) {
         console.error('Error deleting order:', error.message);
-        return res.status(500).json({error: 'Failed to delete order.'});
+        return handleError(res, 500, 'Failed to delete order.');
     }
 };
 
 /**
  * GET /api/orders OR GET /api/orders?uid=ORDER_XXXXXX
- * Returns all orders or single order by UID
+ * Returns all orders or single order by UID.
  */
 exports.getOrders = async (req, res) => {
     try {
@@ -73,7 +73,7 @@ exports.getOrders = async (req, res) => {
         return res.status(200).json(orders || []);
     } catch (error) {
         console.error('Error fetching orders:', error.message);
-        return res.status(500).json({error: 'Failed to fetch orders.'});
+        return handleError(res, 500, 'Failed to fetch orders.');
     }
 };
 
@@ -87,7 +87,7 @@ exports.fetchShopifyOrders = async (req, res) => {
         return res.json(data);
     } catch (err) {
         console.error('Error fetching Shopify orders:', err.message);
-        handleError(res, 500, 'Failed to fetch orders from Shopify.');
+        return handleError(res, 500, 'Failed to fetch orders from Shopify.');
     }
 };
 
@@ -98,9 +98,9 @@ exports.fetchShopifyOrders = async (req, res) => {
 exports.getShopifySync = async (req, res) => {
     try {
         await syncShopifyOrders();
-        res.status(200).json({message: 'Shopify orders synced successfully.'});
+        return res.status(200).json({message: 'Shopify orders synced successfully.'});
     } catch (error) {
         console.error('Error syncing Shopify orders:', error.message);
-        handleError(res, 500, 'Failed to sync Shopify orders.');
+        return handleError(res, 500, 'Failed to sync Shopify orders.');
     }
 };
