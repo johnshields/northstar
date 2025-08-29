@@ -1,5 +1,6 @@
 # project
-works/
+works/*.md
+works/*.png
 
 # Node modules
 node_modules/

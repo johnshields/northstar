@@ -36,7 +36,7 @@ PORT=8080
 IP=127.0.0.1
 ```
 
-#### SQL script located here [sql/schema.sql](sql/schema.sql)
+#### SQL script located here [sql/schema.sql](works/sql/schema.sql)
 
 ---
 
