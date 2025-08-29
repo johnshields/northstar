@@ -15,7 +15,7 @@ Microservice with Shopify Admin API and Supabase (PostgreSQL) integration using 
 $ git clone https://github.com/johnshields/northstar.git
 $ cd northstar/
 $ npm install
-$ node _src/server.js
+$ node src/server.js
 ```
 
 #### .env example:
