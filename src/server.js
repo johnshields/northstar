@@ -4,7 +4,7 @@ const routes = require("./api");
 require("dotenv").config();
 require("./api/scheduler");
 
-// Load api config
+// load api config
 const {NAME, HOST, PORT, VERSION, API_VERSION} = require("./config");
 
 // logger helpers
@@ -74,20 +74,10 @@ class Server {
         process.on("SIGINT", shutdown);
         process.on("SIGTERM", shutdown);
         process.on("uncaughtException", (e) =>
-            error(
-                `uncaught exception: ${
-                    e instanceof Error ? e.stack || e.message : String(e)
-                }`
-            )
+            error(`uncaught exception: ${e instanceof Error ? e.stack || e.message : String(e)}`)
         );
         process.on("unhandledRejection", (reason) =>
-            error(
-                `unhandled rejection: ${
-                    reason instanceof Error
-                        ? reason.stack || reason.message
-                        : String(reason)
-                }`
-            )
+            error(`unhandled rejection: ${reason instanceof Error? reason.stack || reason.message: String(reason)}`)
         );
 
         return this.server;
